@@ -1,4 +1,4 @@
-export const sections = ['hero', 'impact', 'projects', 'goals', 'join', 'footer'];
+export const sections = ['hero', 'principles', 'projects', 'goals', 'join', 'footer'];
 
 export const colors = {
   primary: {

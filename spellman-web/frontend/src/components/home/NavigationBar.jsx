@@ -1,17 +1,14 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useAuth from '../../hooks/useAuth.js';
 
 const links = [
-  { label: 'Our Mission', href: '#mission' },
-  { label: 'Current Projects', href: '#projects' },
-  { label: 'Roadmap', href: '#roadmap' },
+  { label: 'Our Mission', href: '#hero' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Roadmap', href: '#goals' }
 ];
 
 const NavigationBar = () => {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
 
   const scrollTo = (href) => {
     const el = document.querySelector(href);
@@ -42,18 +39,9 @@ const NavigationBar = () => {
               {link.label}
             </button>
           ))}
-          {user?.role === 'admin' ? (
-            <Link to="/admin" className="text-white/80 hover:text-white">
-              Admin
-            </Link>
-          ) : (
-            <Link to="/login" className="text-white/80 hover:text-white">
-              Login
-            </Link>
-          )}
           <a
             href="#join"
-            className="inline-flex items-center rounded-full bg-white/15 px-5 py-2 text-white transition hover:bg-white/30"
+            className="inline-flex items-center rounded-full bg-primary-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-primary-600"
           >
             Get Involved
           </a>
@@ -78,9 +66,6 @@ const NavigationBar = () => {
               {link.label}
             </button>
           ))}
-          <Link to={user?.role === 'admin' ? '/admin' : '/login'} className="block py-2 text-white/80">
-            {user?.role === 'admin' ? 'Admin' : 'Login'}
-          </Link>
         </div>
       ) : null}
     </motion.header>

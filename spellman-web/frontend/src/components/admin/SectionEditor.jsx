@@ -19,7 +19,7 @@ const sectionFields = {
     { name: 'buttonText', label: 'Primary button text', component: 'input' },
     { name: 'secondaryButtonText', label: 'Secondary button text', component: 'input' }
   ],
-  impact: [
+  principles: [
     { name: 'title', label: 'Section title', component: 'input' },
     { name: 'statTitle', label: 'Statistic title', component: 'input' },
     { name: 'statDescription', label: 'Statistic description', component: 'textarea' },

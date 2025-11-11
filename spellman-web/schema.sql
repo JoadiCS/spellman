@@ -46,3 +46,43 @@ CREATE TABLE IF NOT EXISTS site_content (
 
 CREATE INDEX IF NOT EXISTS idx_site_content_section ON site_content(section);
 CREATE INDEX IF NOT EXISTS idx_site_content_display_order ON site_content(display_order);
+
+CREATE TABLE IF NOT EXISTS domains (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  domain TEXT NOT NULL UNIQUE,
+  status TEXT NOT NULL DEFAULT 'Connected',
+  ssl_status TEXT NOT NULL DEFAULT 'Active',
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS security_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mfa_enabled BOOLEAN DEFAULT TRUE,
+  alerts_enabled BOOLEAN DEFAULT TRUE,
+  auto_logout BOOLEAN DEFAULT FALSE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS admin_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  org_name TEXT,
+  support_email TEXT,
+  notes TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO security_settings (mfa_enabled, alerts_enabled, auto_logout)
+SELECT TRUE, TRUE, FALSE
+WHERE NOT EXISTS (SELECT 1 FROM security_settings);
+
+INSERT INTO admin_settings (org_name, support_email, notes)
+SELECT 'Spellman Impact Network', 'hello@spellman.earth', 'Coordinated rollout for Q3 goals.'
+WHERE NOT EXISTS (SELECT 1 FROM admin_settings);
+
+INSERT INTO domains (domain, status, ssl_status)
+SELECT domain, status, ssl_status FROM (VALUES
+  ('spellman.earth', 'Connected', 'Active'),
+  ('impact.spellman.earth', 'Syncing', 'Pending'),
+  ('admin.spellman.earth', 'Connected', 'Active')
+) AS seed(domain, status, ssl_status)
+ON CONFLICT DO NOTHING;

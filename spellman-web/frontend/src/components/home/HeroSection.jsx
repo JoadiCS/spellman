@@ -8,6 +8,8 @@ const HeroSection = () => {
   const { data } = useContent('hero');
   const hero = data?.[0];
   const words = useMemo(() => formatHookWords(hero?.hookWords || 'people, planet, progress'), [hero?.hookWords]);
+  const backgroundVideo = hero?.backgroundVideoUrl || '/home-bg.mp4';
+  const videoPoster = hero?.videoPosterUrl || hero?.imageUrl;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -20,16 +22,16 @@ const HeroSection = () => {
 
   return (
     <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-neutral-900 py-0 text-white">
-      {hero?.backgroundVideoUrl ? (
+      {backgroundVideo ? (
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
-          poster={hero?.videoPosterUrl}
+          poster={videoPoster}
         >
-          <source src={hero.backgroundVideoUrl} type="video/mp4" />
+          <source src={backgroundVideo} type="video/mp4" />
         </video>
       ) : hero?.imageUrl ? (
         <img src={hero.imageUrl} alt="Hero" className="absolute inset-0 h-full w-full object-cover" />

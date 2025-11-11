@@ -70,11 +70,52 @@ export const deleteContent = async (id) => {
 
 const camelToSnake = (value) => value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 
+const allowedColumns = new Set([
+  'section',
+  'key',
+  'title',
+  'subtitle',
+  'description',
+  'image_url',
+  'icon',
+  'color',
+  'display_order',
+  'hook_words',
+  'background_video_url',
+  'video_poster_url',
+  'button_text',
+  'secondary_button_text',
+  'stat_title',
+  'stat_description',
+  'project_title',
+  'project_description',
+  'project_image_url',
+  'goal_title',
+  'short_description',
+  'long_description',
+  'org_name',
+  'address',
+  'email',
+  'phone',
+  'newsletter_button_text',
+  'created_by'
+]);
+
+const numericColumns = new Set(['display_order']);
+
 const normalizePayload = (data) =>
   Object.entries(data).reduce((acc, [key, value]) => {
     if (value === undefined) return acc;
     const column = columnMap[key] || key;
-    acc[column] = value;
+    if (!allowedColumns.has(column)) return acc;
+    let normalizedValue = value;
+    if (normalizedValue === '') {
+      normalizedValue = null;
+    } else if (numericColumns.has(column)) {
+      const parsed = Number(normalizedValue);
+      normalizedValue = Number.isNaN(parsed) ? null : parsed;
+    }
+    acc[column] = normalizedValue;
     return acc;
   }, {});
 

@@ -33,3 +33,12 @@ export const findById = async (id) => {
 };
 
 export const verifyPassword = (password, hash) => bcrypt.compare(password, hash);
+
+export const listUsers = async () => {
+  const { rows } = await query(
+    `SELECT id, email, full_name AS "fullName", role, updated_at AS "updatedAt", created_at AS "createdAt"
+     FROM ${TABLE}
+     ORDER BY updated_at DESC NULLS LAST`
+  );
+  return rows;
+};
