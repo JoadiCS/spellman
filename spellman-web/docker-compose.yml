@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: spellman_db
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: spellman
+      POSTGRES_USER: spellman
+      POSTGRES_PASSWORD: spellman
+    volumes:
+      - spellman_db_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./docker/init/seed_admin.sql:/docker-entrypoint-initdb.d/02-seed-admin.sql:ro
+
+volumes:
+  spellman_db_data:
